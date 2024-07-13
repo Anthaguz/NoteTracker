@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗒️ Note Manager</title>
+    <link rel="stylesheet" href="syles.css">
+</head>
+<body>
+    <h1>Note manager 🗒️</h1>
+    <button onclick="window.location.href='/notas/0'">New Note</button>
+    <!-- <div class="grid-container">
+        <% items.forEach(item => { %>
+            <div class="grid-item">
+                <h2><%= item.title %></h2>
+                <p><strong>Content:</strong> <%= item.content %></p>
+                <p><strong>Creation Date:</strong> <%= item.creationDate %></p>
+                <p><strong>Last Modification:</strong> <%= item.lastModification %></p>
+                <p><strong>Tags:</strong></p>
+                <ul>
+                    <% item.tags.forEach(tag => { %>
+                        <li><%= tag %></li>
+                    <% }); %>
+                </ul>
+                <button onclick="window.location.href='/edit/<%= item.id %>'">Edit</button>
+            </div>
+        <% }); %>
+    </div> -->
+    <div class="grid-container">
+        <% items.forEach(item => { %>
+            <div class="grid-item">
+                <h2><%= item.title %></h2>
+                <p><strong>Content:</strong> <%= item.content %></p>
+                <p><strong>Creation Date:</strong> <%= item.creationDate %></p>
+                <p><strong>Last Modification:</strong> <%= item.lastModification %></p>
+                <p><strong>Tags:</strong></p>
+                <ul>
+                    <% item.tags.forEach(tag => { %>
+                        <li><%= tag %></li>
+                    <% }); %>
+                </ul>
+                <button onclick="window.location.href='/notas/<%= item.id %>'">Edit</button>
+                <form action="/delete/<%= item.id %>" method="post" style="display: inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
