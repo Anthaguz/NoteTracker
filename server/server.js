@@ -7,9 +7,8 @@ const PUBLIC = path.join(__dirname, 'public');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(PUBLIC)));
-//app.use(bodyParser.urlencoded({ extended: true }));
-const contadorDeNotas = 0;
+app.use(express.static(PUBLIC));
+let contadorDeNotas = 0;
 
 let items = [
 //     {
@@ -47,10 +46,13 @@ app.get('/notas/:id', (req, res) => {
     const itemId = parseInt(req.params.id, 10);
     const item = items.find(i => i.id === itemId);
     if (item) {
+        console.log(`GET /notas/${itemId} - Editing existing item`);
         res.render('edit', { item });
     } else if (itemId == 0) {
+        console.log(`GET /notas/${itemId} - Creating new item item`);
         res.render('add');
     } else {
+        console.log(`GET /notas/${itemId} - Item not found`);
         res.status(404).send('Item not found');
     }
 });
@@ -58,8 +60,9 @@ app.get('/notas/:id', (req, res) => {
 //Aqui me di cuenta que no puedo enviar un PUT o DELETE desde un formulario, por lo que tuve que cambiarlo a POST
 // Agregar una nueva nota
 app.post('/add', (req, res) => {
+    contadorDeNotas++;
     const newItem = {
-        id: items.length ? items[items.length - 1].id + 1 : 1,
+        id: contadorDeNotas,
         title: req.body.title,
         content: req.body.content,
         creationDate: new Date().toISOString().split('T')[0],
@@ -67,6 +70,7 @@ app.post('/add', (req, res) => {
         tags: req.body.tags.split(',').map(tag => tag.trim())
     };
     items.push(newItem);
+    console.log(`POST /add - New item id= ${newItem.id} - ${newItem.title}`);
     res.redirect('/');
 });
 
@@ -74,6 +78,7 @@ app.post('/add', (req, res) => {
 app.post('/delete/:id', (req, res) => {
     const itemId = parseInt(req.params.id, 10);
     items = items.filter(item => item.id !== itemId);
+    console.log(`POST /delete/${itemId} - Deleting item id= ${itemId}`);    
     res.redirect('/');
 });
 
@@ -86,21 +91,13 @@ app.post('/update/:id', (req, res) => {
         item.content = req.body.content;
         item.tags = req.body.tags.split(',').map(tag => tag.trim());
         item.lastModification = new Date().toISOString().split('T')[0];
+        console.log(`POST /update/${itemId} - Updated item id = ${itemId} - ${item.title}`);
         res.redirect('/');
     } else {
+        console.log(`POST /update/${itemId} - Item not found`);
         res.status(404).send('Item not found');
     }
 });
-
-
-
-
-
-
-
-
-
-
 
 
 app.listen(PORT, () => {
